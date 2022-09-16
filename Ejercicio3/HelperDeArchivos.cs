@@ -1,9 +1,10 @@
 using System;
 using System.IO;
+using NLog;
 
 static class HelperDeArchivos
 {
-    public static void CargarContenido(Alumno A)
+    public static void CargarContenido(Alumno A, Logger log)
     {
         string datos = Convert.ToString(A.Id) + ", " + A.Apellido + ", " + A.Nombre + ", " + Convert.ToString(A.Dni);
 
@@ -28,9 +29,11 @@ static class HelperDeArchivos
         var escribir = new StreamWriter(File.Open(archivo, FileMode.Append));
         escribir.WriteLine(datos);
         escribir.Close();
+
+        log.Info($"{DateTime.Now}: Se ha agregado un nuevo alumno al archivo {Path.GetFileName(archivo)}");
     }
 
-    public static void LimpiarContenido()
+    public static void LimpiarContenido(Logger log)
     {
         Console.WriteLine("\nSeleccione el archivo que desea limpiar:");
         Console.WriteLine("1: Atletismo, 2: Volley, 3: Futbol");
@@ -56,5 +59,8 @@ static class HelperDeArchivos
         FileStream fileStream = File.Open(archivo, FileMode.Open);
         fileStream.SetLength(0);
         fileStream.Close();
+        
+
+        log.Info($"{DateTime.Now}: Se ha limpiado el contenido del archivo {Path.GetFileName(archivo)}");
     }
 }
